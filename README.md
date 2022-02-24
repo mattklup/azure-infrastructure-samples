@@ -27,6 +27,8 @@ ssh-keygen -m PEM -t rsa -b 4096 -N '' -f ./ssh
 # ...
 
 chmod 400 ./ssh
-ssh -i ./ssh sampleAdmin@samples-mattklup-centralus.centralus.cloudapp.azure.com
+
+# Sample based on my workflow action
+ssh -i ./ssh mattklup@samples-mattklup-centralus.centralus.cloudapp.azure.com
 
 ```
