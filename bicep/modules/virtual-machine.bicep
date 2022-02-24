@@ -10,13 +10,13 @@ param adminUserName string = 'sampleAdmin'
 @description('Public SSH key for the vm.')
 param publicSshKey string
 
-@description('Location for the vm.')
+@description('DNS label prefix for the vm.')
 param dnsLabelPrefix string
 
-@description('Location for the vm.')
+@description('Subnet ID for the vm.')
 param subnetId string
 
-@description('Location for the vm.')
+@description('Network Sercurity Group Id for the vm.')
 param networkSercurityGroupId string
 
 var vmName = name

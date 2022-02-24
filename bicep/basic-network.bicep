@@ -23,7 +23,7 @@ module virtualNetworkModule 'modules/virtual-network.bicep' = {
 module virtualMachine 'modules/virtual-machine.bicep' = [for i in range(0, vmCount): {
   name: 'virtualMachine-${i}'
   params: {
-    name: '${name}-{i}'
+    name: '${name}-${i}'
     location: location
     adminUserName: adminUserName
     publicSshKey: publicSshKey
