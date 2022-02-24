@@ -2,7 +2,7 @@
 
 ## Azure Auth
 
-Workflows connect to azure using a service principal.  This can be setup one time and added to both Actions/Codespace secrets in your [settings](settings/secrets/actions) as `AZURE_CREDENTIALS`.
+Workflows connect to azure using a service principal.  This can be setup one time and added to both Actions/Codespace secrets in your [settings](../../settings/secrets/actions) as `AZURE_CREDENTIALS`.
 
 ```bash
 az login --use-device-code
@@ -23,4 +23,10 @@ az ad sp create-for-rbac \
 
 ```bash
 ssh-keygen -m PEM -t rsa -b 4096 -N '' -f ./ssh
+
+# ...
+
+chmod 400 ./ssh
+ssh -i ./ssh sampleAdmin@samples-mattklup-centralus.centralus.cloudapp.azure.com
+
 ```

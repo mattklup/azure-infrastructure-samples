@@ -56,7 +56,9 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         template: ./bicep/basic-network.bicep
         failOnStdErr: false
-        # parameters: TBD
+        parameters: >-
+          adminUserName=${{ github.actor }}
+          publicSshKey=${{ secrets.SSH_PUB }}
 
     - name: Last step diagnostics
       if: always()
