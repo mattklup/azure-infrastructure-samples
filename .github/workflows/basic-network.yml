@@ -47,8 +47,9 @@ jobs:
         inlineScript: |
           #!/bin/bash
           az group create --name $AZURE_RESOURCE_GROUP_NAME --location $AZURE_RESOURCE_GROUP_LOCATION
+          echo 🎉
 
-    - name: Deploy bicep
+    - name: Deploy Bicep templates 💪
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
