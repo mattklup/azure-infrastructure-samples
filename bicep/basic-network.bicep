@@ -34,6 +34,8 @@ module virtualMachine 'modules/virtual-machine.bicep' = [for i in range(0, vmCou
   }
 }]
 
-output virtualNetwork object = json(string(virtualNetworkModule.outputs.outputs))
-
-output virtualMachines array = [for i in range(0, vmCount): virtualMachine[i]]
+var virtualMachinesOutput = [for i in range(0, vmCount): virtualMachine[i]]
+output network object = {
+  virtualNetwork: virtualNetworkModule.outputs.outputs
+  virtualMachines: virtualMachinesOutput
+}
