@@ -24,7 +24,7 @@ az ad sp create-for-rbac \
 ```bash
 ssh-keygen -m PEM -t rsa -b 4096 -N '' -f ./ssh
 
-# ...
+# Store the private key somewhere safe to ssh to your vm
 
 chmod 400 ./ssh
 
