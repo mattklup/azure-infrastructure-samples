@@ -18,8 +18,8 @@ on:
   push:
     branches:
     paths:
-      - ./.github/workflows/basic-network.yml
-      - ./bicep/basic-network.bicep
+      - .github/workflows/basic-network.yml
+      - bicep/basic-network.bicep
 
 env:
   AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'centralus' }}
