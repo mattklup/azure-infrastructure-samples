@@ -2,7 +2,7 @@
 
 ## Azure Auth
 
-Workflows connect to azure using a service principal.  This can be setup one time and added to both Actions/Codespace secrets in your [settings](../../settings/secrets/actions) as `AZURE_CREDENTIALS`.
+Workflows connect to azure using a service principal.  This can be setup one time and added to both Actions/Codespace secrets in your [settings](https://docs.github.com/en/actions/security-guides/encrypted-secrets) as `AZURE_CREDENTIALS`.
 
 ```bash
 az login --use-device-code
