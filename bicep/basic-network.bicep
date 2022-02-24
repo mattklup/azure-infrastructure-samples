@@ -4,7 +4,7 @@ param location string = resourceGroup().location
 @description('Base name for the network.')
 param name string = resourceGroup().name
 
-var dnsLabelPrefix = '${name}-dnsPrefix'
+var dnsLabelPrefix = toLower(name)
 var addressPrefix = '10.0.0.0/16'
 var subnetName = '${name}-subnet'
 var subnetPrefix = '10.0.0.0/24'
