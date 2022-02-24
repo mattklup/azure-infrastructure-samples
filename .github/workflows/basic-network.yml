@@ -78,8 +78,8 @@ jobs:
     - name: Save deployment output
       run: |
         mkdir artifacts
-        echo ${{ toJSON(steps.azure-deploy.outputs) }}
-        echo ${{ toJSON(steps.azure-deploy.outputs) }} >> artifacts/deployment.json
+        echo '${{ toJSON(steps.azure-deploy.outputs) }}'
+        echo '${{ toJSON(steps.azure-deploy.outputs) }}' >> artifacts/deployment.json
 
     - name: Upload Azure Deploy Output
       uses: actions/upload-artifact@v2
