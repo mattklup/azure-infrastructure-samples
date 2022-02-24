@@ -1,0 +1,65 @@
+name: deploy basic network
+
+on:
+  workflow_dispatch:
+    inputs:
+      resource-group-name:
+        required: false
+        description: Azure resource group name
+        type: string
+      location:
+        required: false
+        description: Azure resource group location
+        type: choice
+        options:
+        - westus2
+        - centralus
+
+  push:
+    branches:
+  pull_request:
+    branches: [ main ]
+
+env:
+  AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'centralus' }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Set current Azure Subscription and update environment variables
+      run: |
+        az account show
+        echo "AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)" >> $GITHUB_ENV
+        echo "AZURE_RESOURCE_GROUP_NAME=${{ github.event.inputs.resource-group-name || format('samples-{0}-{1}', github.actor, env.AZURE_RESOURCE_GROUP_LOCATION) }}" >> $GITHUB_ENV
+
+    - name: Create Azure Resource Group
+      uses: Azure/CLI@v1
+      with:
+        inlineScript: |
+          #!/bin/bash
+          az group create --name $AZURE_RESOURCE_GROUP_NAME --location $AZURE_RESOURCE_GROUP_LOCATION
+
+    - name: Deploy bicep
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        template: ./bicep/basic-network.bicep
+        failOnStdErr: false
+        # parameters: TBD
+
+    - name: Last step diagnostics
+      if: always()
+      run: |
+        pwd
+        printenv | sort
+        ls -alFR -I.git
