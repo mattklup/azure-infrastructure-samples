@@ -79,6 +79,7 @@ jobs:
       run: |
         mkdir artifacts
         echo ${{ steps.azure-deploy.outputs }}
+        echo "AZURE_DEPLOY_OUTPUT='${{ steps.azure-deploy.outputs }}'" >> $GITHUB_ENV
         echo ${{ steps.azure-deploy.outputs }} >> artifacts/deployment.json
 
     - name: Upload Azure Deploy Output
