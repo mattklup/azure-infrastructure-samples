@@ -54,8 +54,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
   }
 }
 
-output outputs object = {
-  subnetId: virtualNetwork.properties.subnets[0].id
-  dnsLabelPrefix: dnsLabelPrefix
-  networkSercurityGroupId: networkSecurityGroup.id
-}
+output subnetId string = virtualNetwork.properties.subnets[0].id
+output dnsLabelPrefix string = dnsLabelPrefix
+output networkSercurityGroupId string = networkSecurityGroup.id
