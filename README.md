@@ -32,3 +32,7 @@ chmod 400 ./ssh
 ssh -i ./ssh mattklup@samples-mattklup-centralus.centralus.cloudapp.azure.com
 
 ```
+
+## Actions
+
+Workflows are provided to deploy bicep files.  See the [descriptions](../../bicep/README.md)
