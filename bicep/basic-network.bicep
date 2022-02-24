@@ -10,12 +10,23 @@ param adminUserName string = 'sampleAdmin'
 @description('Public SSH key for the vm.')
 param publicSshKey string
 
-module virtualNetworkModue 'modules/virtual-network.bicep' = {
+module virtualNetworkModule 'modules/virtual-network.bicep' = {
   name: 'virtualNetwork'
+  params: {
+    name: name
+    location: location
+  }
+}
+
+module virtualMachine 'modules/virtual-machine.bicep' = {
+  name: 'virtualMachine'
   params: {
     name: name
     location: location
     adminUserName: adminUserName
     publicSshKey: publicSshKey
+    dnsLabelPrefix: virtualNetworkModule.outputs.dnsLabelPrefix
+    subnetId: virtualNetworkModule.outputs.subnetId
+    networkSercurityGroupId: virtualNetworkModule.outputs.networkSercurityGroupId
   }
 }
