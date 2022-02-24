@@ -18,7 +18,7 @@ on:
   push:
     branches:
     paths:
-      - ./github/workflows/basic-network.yml
+      - ./.github/workflows/basic-network.yml
       - ./bicep/basic-network.bicep
 
 env:
