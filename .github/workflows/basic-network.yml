@@ -33,7 +33,7 @@ on:
 env:
   AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'centralus' }}
   AZURE_DEPLOYMENT_MODE: ${{ github.event.inputs.deployment-mode || 'Incremental' }}
-  AZURE_DEPLOYMENT_NAME: ${{ format('{0}.{1}', github.REF_NAME, github.RUN_ID) }}
+  AZURE_DEPLOYMENT_NAME: ${{ format('basic-netwrok.{0}.{1}', github.actor, github.RUN_ID) }}
 
 jobs:
   deploy:
