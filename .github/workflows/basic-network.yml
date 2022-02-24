@@ -8,21 +8,32 @@ on:
         description: Azure resource group name
         type: string
       location:
-        required: false
+        required: true
         description: Azure resource group location
         type: choice
         options:
         - westus2
         - centralus
+      deployment-mode:
+        required: true
+        description: Azure deployment mode
+        type: choice
+        options:
+        - Incremental
+        - Complete
+        - Validate
 
   push:
     branches:
     paths:
       - .github/workflows/basic-network.yml
       - bicep/basic-network.bicep
+      - bicep/modules/*.bicep
 
 env:
   AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'centralus' }}
+  AZURE_DEPLOYMENT_MODE: ${{ github.event.inputs.deployment-mode || 'Incremental' }}
+  AZURE_DEPLOYMENT_NAME: ${{ format('{0}.{1}', github.REF_NAME, github.RUN_ID) }}
 
 jobs:
   deploy:
@@ -56,6 +67,8 @@ jobs:
       with:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        deploymentMode: ${{ env.AZURE_DEPLOYMENT_MODE }}
+        deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
         template: ./bicep/basic-network.bicep
         failOnStdErr: false
         parameters: >-
