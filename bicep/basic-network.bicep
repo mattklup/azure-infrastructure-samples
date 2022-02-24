@@ -28,9 +28,9 @@ module virtualMachine 'modules/virtual-machine.bicep' = [for i in range(0, vmCou
     location: location
     adminUserName: adminUserName
     publicSshKey: publicSshKey
-    dnsLabelPrefix: '${virtualNetworkModule.outputs.outputs.dnsLabelPrefix}-${i}'
-    subnetId: virtualNetworkModule.outputs.outputs.subnetId
-    networkSercurityGroupId: virtualNetworkModule.outputs.outputs.networkSercurityGroupId
+    dnsLabelPrefix: '${virtualNetworkModule.outputs.dnsLabelPrefix}-${i}'
+    subnetId: virtualNetworkModule.outputs.subnetId
+    networkSercurityGroupId: virtualNetworkModule.outputs.networkSercurityGroupId
   }
 }]
 
@@ -38,4 +38,7 @@ output virtualNetworkDnsLabelPrefix string = virtualNetworkModule.outputs.dnsLab
 output virtualNetworkNetworkSercurityGroupId string = virtualNetworkModule.outputs.networkSercurityGroupId
 output virtualNetworkSubnetId string = virtualNetworkModule.outputs.subnetId
 
-output virtualMachines array = [for i in range(0, vmCount): virtualMachine[i]]
+output virtualMachines array = [for i in range(0, vmCount): {
+  name: virtualMachine[i].name
+  hostName: virtualMachine[i].outputs.hostname
+}]
