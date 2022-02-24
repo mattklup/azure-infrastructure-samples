@@ -10,6 +10,7 @@ param adminUserName string = 'sampleAdmin'
 @description('Public SSH key for the vms.')
 param publicSshKey string
 
+@description('Number of vms to deploy.')
 var vmCount = 2
 
 module virtualNetworkModule 'modules/virtual-network.bicep' = {
@@ -27,9 +28,8 @@ module virtualMachine 'modules/virtual-machine.bicep' = [for i in range(0, vmCou
     location: location
     adminUserName: adminUserName
     publicSshKey: publicSshKey
-    dnsLabelPrefix: virtualNetworkModule.outputs.dnsLabelPrefix
+    dnsLabelPrefix: '${virtualNetworkModule.outputs.dnsLabelPrefix}-${i}'
     subnetId: virtualNetworkModule.outputs.subnetId
     networkSercurityGroupId: virtualNetworkModule.outputs.networkSercurityGroupId
   }
 }]
-

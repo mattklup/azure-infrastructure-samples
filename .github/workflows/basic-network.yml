@@ -51,6 +51,7 @@ jobs:
           echo 🎉
 
     - name: Deploy Bicep templates 💪
+      id: azure-deploy
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
@@ -60,6 +61,18 @@ jobs:
         parameters: >-
           adminUserName="${{ github.actor }}"
           publicSshKey="${{ secrets.SSH_PUB }}"
+
+    - name: Save deployment output
+      run: |
+        mkdir artifacts
+        echo ${{ steps.azure-deploy.outputs }}
+        echo ${{ steps.azure-deploy.outputs }} >> artifacts/deployment.json
+
+    - name: Upload Azure Deploy Output
+      uses: actions/upload-artifact@v2
+      with:
+        name: Deployment
+        path: artifacts
 
     - name: Last step diagnostics
       if: always()
