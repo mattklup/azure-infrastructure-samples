@@ -33,3 +33,5 @@ module virtualMachine 'modules/virtual-machine.bicep' = [for i in range(0, vmCou
     networkSercurityGroupId: virtualNetworkModule.outputs.networkSercurityGroupId
   }
 }]
+
+output virtualNetwork object = virtualNetworkModule.outputs
