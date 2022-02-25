@@ -5,7 +5,7 @@ on:
     inputs:
       resource-group-name:
         required: false
-        description: Azure resource group name
+        description: Azure resource group name (Leave empty to default to your github name)
         type: string
       location:
         required: true
@@ -19,8 +19,8 @@ on:
         description: Azure deployment mode
         type: choice
         options:
-        - Incremental
         - Complete
+        - Incremental
         - Validate
 
   push:
@@ -32,7 +32,7 @@ on:
 
 env:
   IS_MAIN_PUSH: ${{ github.ref == 'refs/heads/main' }}
-  AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'centralus' }}
+  AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'westus2' }}
   AZURE_DEPLOYMENT_NAME: ${{ format('basic-netwrok.{0}.{1}', github.actor, github.RUN_ID) }}
   AZURE_DEPLOYMENT_MODE: >-
     ${{ 
