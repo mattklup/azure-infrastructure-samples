@@ -6,10 +6,26 @@ param name string = resourceGroup().name
 
 var dnsLabelPrefix = toLower(name)
 var addressPrefix = '10.0.0.0/16'
-var subnetName = '${name}-subnet'
-var subnetPrefix = '10.0.0.0/24'
 var virtualNetworkName = name
 var networkSecurityGroupName = '${name}-nsgAllowRemoting'
+
+var subnetName = '${name}-subnet'
+// var subnetPrefix = '10.0.0.0/24'
+
+var subnets = [
+  {
+    name: '${subnetName}-0'
+    properties: {
+      addressPrefix: '10.0.0.0/24'
+    }
+  }
+  {
+    name: '${subnetName}-1'
+    properties: {
+      addressPrefix: '10.0.1.0/24'
+    }
+  }
+]
 
 resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
   name: networkSecurityGroupName
@@ -43,17 +59,10 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
         addressPrefix
       ]
     }
-    subnets: [
-      {
-        name: subnetName
-        properties: {
-          addressPrefix: subnetPrefix
-        }
-      }
-    ]
+    subnets: subnets
   }
 }
 
-output subnetId string = virtualNetwork.properties.subnets[0].id
+output subnets array = virtualNetwork.properties.subnets
 output dnsLabelPrefix string = dnsLabelPrefix
 output networkSercurityGroupId string = networkSecurityGroup.id
