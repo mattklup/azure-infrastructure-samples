@@ -25,10 +25,6 @@ on:
 
   push:
     branches:
-    paths:
-      - .github/workflows/basic-network.yml
-      - bicep/basic-network.bicep
-      - bicep/modules/*.bicep
 
 env:
   IS_MAIN_PUSH: ${{ github.ref == 'refs/heads/main' }}
@@ -74,7 +70,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         deploymentMode: ${{ env.AZURE_DEPLOYMENT_MODE }}
         deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
-        template: ./bicep/basic-network.bicep
+        template: ./bicep/main.santiago.bicep
         failOnStdErr: false
         parameters: >-
           adminUserName="${{ github.actor }}"
