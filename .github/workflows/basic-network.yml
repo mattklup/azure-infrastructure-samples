@@ -8,21 +8,32 @@ on:
         description: Azure resource group name
         type: string
       location:
-        required: false
+        required: true
         description: Azure resource group location
         type: choice
         options:
         - westus2
         - centralus
+      deployment-mode:
+        required: true
+        description: Azure deployment mode
+        type: choice
+        options:
+        - Incremental
+        - Complete
+        - Validate
 
   push:
     branches:
     paths:
       - .github/workflows/basic-network.yml
       - bicep/basic-network.bicep
+      - bicep/modules/*.bicep
 
 env:
   AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'centralus' }}
+  AZURE_DEPLOYMENT_MODE: ${{ github.event.inputs.deployment-mode || 'Incremental' }}
+  AZURE_DEPLOYMENT_NAME: ${{ format('basic-netwrok.{0}.{1}', github.actor, github.RUN_ID) }}
 
 jobs:
   deploy:
@@ -51,15 +62,32 @@ jobs:
           echo 🎉
 
     - name: Deploy Bicep templates 💪
+      id: azure-deploy
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        deploymentMode: ${{ env.AZURE_DEPLOYMENT_MODE }}
+        deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
         template: ./bicep/basic-network.bicep
         failOnStdErr: false
         parameters: >-
           adminUserName="${{ github.actor }}"
           publicSshKey="${{ secrets.SSH_PUB }}"
+
+    - name: Save deployment output
+      env:
+        AZURE_DEPLOY_OUTPUT: ${{ toJSON(steps.azure-deploy.outputs) }}
+      run: |
+        mkdir artifacts
+        echo $AZURE_DEPLOY_OUTPUT
+        echo $AZURE_DEPLOY_OUTPUT >> artifacts/deployment.json
+
+    - name: Upload Azure Deploy Output
+      uses: actions/upload-artifact@v2
+      with:
+        name: Deployment
+        path: artifacts
 
     - name: Last step diagnostics
       if: always()
