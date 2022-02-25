@@ -5,7 +5,7 @@ on:
     inputs:
       resource-group-name:
         required: false
-        description: Azure resource group name (Leave empty to default to your github name)
+        description: Azure resource group name (Leave empty to default to your '{github_name}-{location}')
         type: string
       location:
         required: true
@@ -56,7 +56,7 @@ jobs:
       run: |
         az account show
         echo "AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)" >> $GITHUB_ENV
-        echo "AZURE_RESOURCE_GROUP_NAME=${{ github.event.inputs.resource-group-name || format('samples-{0}-{1}', github.actor, env.AZURE_RESOURCE_GROUP_LOCATION) }}" >> $GITHUB_ENV
+        echo "AZURE_RESOURCE_GROUP_NAME=${{ github.event.inputs.resource-group-name || format('{0}-{1}', github.actor, env.AZURE_RESOURCE_GROUP_LOCATION) }}" >> $GITHUB_ENV
 
     - name: Create Azure Resource Group
       uses: Azure/CLI@v1
