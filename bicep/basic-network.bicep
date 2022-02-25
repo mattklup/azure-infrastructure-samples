@@ -42,5 +42,3 @@ output virtualMachines array = [for i in range(0, vmCount): {
   name: virtualMachine[i].name
   hostName: virtualMachine[i].outputs.hostname
 }]
-
-output virtualMachineHostNames array = [for i in range(0, vmCount): virtualMachine[i].outputs.hostname]
