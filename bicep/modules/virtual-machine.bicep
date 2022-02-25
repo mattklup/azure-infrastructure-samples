@@ -1,27 +1,27 @@
-@description('Location for the vm.')
+@description('Location for the virtual machine.')
 param location string = resourceGroup().location
 
-@description('Base name for the vm.')
+@description('Base name for the virtual machine.')
 param name string = resourceGroup().name
 
-@description('User name for the vm.')
+@description('User name for the virtual machine.')
 param adminUserName string = 'sampleAdmin'
 
-@description('Public SSH key for the vm.')
+@description('Public SSH key for the virtual machine.')
 param publicSshKey string
 
-@description('DNS label prefix for the vm.')
+@description('DNS label prefix for the virtual machine.')
 param dnsLabelPrefix string
 
-@description('Subnet ID for the vm.')
+@description('Subnet ID for the virtual machine.')
 param subnetId string
 
-@description('Network Sercurity Group Id for the vm.')
+@description('Network Sercurity Group Id for the virtual machine.')
 param networkSercurityGroupId string
 
-var vmName = name
-var vmSize = 'Standard_D2s_v3'
-var nicName = '${name}-nic'
+var virtualMachineName = name
+var virtualMachineSize = 'Standard_D2s_v3'
+var networkInterfaceName = '${name}-nic'
 var publicIPAddressName = '${name}-publicIpAddress'
 
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = {
@@ -38,8 +38,8 @@ resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = {
   }
 }
 
-resource nic 'Microsoft.Network/networkInterfaces@2020-06-01' = {
-  name: nicName
+resource networkInterface 'Microsoft.Network/networkInterfaces@2020-06-01' = {
+  name: networkInterfaceName
   location: location
   properties: {
     ipConfigurations: [
@@ -62,15 +62,15 @@ resource nic 'Microsoft.Network/networkInterfaces@2020-06-01' = {
   }
 }
 
-resource vm 'Microsoft.Compute/virtualMachines@2019-12-01' = {
-  name: vmName
+resource virtualMachine 'Microsoft.Compute/virtualMachines@2019-12-01' = {
+  name: virtualMachineName
   location: location
   properties: {
     hardwareProfile: {
-      vmSize: vmSize
+      vmSize: virtualMachineSize
     }
     osProfile: {
-      computerName: vmName
+      computerName: virtualMachineName
       adminUsername: adminUserName
       linuxConfiguration: {
         disablePasswordAuthentication: true
@@ -98,7 +98,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2019-12-01' = {
     networkProfile: {
       networkInterfaces: [
         {
-          id: nic.id
+          id: networkInterface.id
         }
       ]
     }
