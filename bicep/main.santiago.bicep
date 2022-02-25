@@ -2,7 +2,9 @@ param location string = resourceGroup().location
 
 param virtualNetworkName string = 'hub-vnet'
 
-param addressPrefixes array = array('10.0.0.0/16')
+param addressPrefixes array = [
+  '10.0.0.0/16'
+]
 
 param mainSubnetPrefix string = '10.0.0.0/24'
 
@@ -18,7 +20,7 @@ param bastionSubnetAddressSpace string = '10.0.2.0/24'
 
 param publicIpAddressForBastion string = 'hub-vnet-bastion-ip'
 
-resource virtualNetworkName_resource 'Microsoft.Network/VirtualNetworks@2021-01-01' = {
+resource virtualNetworkName_resource 'Microsoft.Network/VirtualNetworks@2020-03-01' = {
   name: virtualNetworkName
 
   location: location
@@ -27,9 +29,7 @@ resource virtualNetworkName_resource 'Microsoft.Network/VirtualNetworks@2021-01-
 
   properties: {
     addressSpace: {
-      addressPrefixes: [
-        addressPrefixes
-      ]
+      addressPrefixes: addressPrefixes
     }
 
     subnets: [
@@ -88,11 +88,11 @@ resource firewallName_resource 'Microsoft.Network/azureFirewalls@2019-04-01' = {
 
         properties: {
           subnet: {
-            id: resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, 'AzureFirewallSubnet')
+            id: virtualNetworkName_resource.id
           }
 
           publicIPAddress: {
-            id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', publicIpAddressForFirewall)
+            id: publicIpAddress_resource.id
           }
         }
       }
@@ -126,11 +126,11 @@ resource bastionName_resource 'Microsoft.Network/bastionHosts@2019-04-01' = {
 
         properties: {
           subnet: {
-            id: resourceId(resourceGroup().name, 'Microsoft.Network/virtualNetworks/subnets', virtualNetworkName, 'AzureBastionSubnet')
+            id: virtualNetworkName_resource.properties.subnets[2].id
           }
 
           publicIPAddress: {
-            id: resourceId(resourceGroup().name, 'Microsoft.Network/publicIpAddresses', publicIpAddressForBastion)
+            id: publicIpAddressForBastion_resource.id
           }
         }
       }
