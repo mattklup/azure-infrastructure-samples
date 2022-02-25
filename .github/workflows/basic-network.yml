@@ -74,7 +74,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME || 'mattklup-fake' }}
         deploymentMode: ${{ env.AZURE_DEPLOYMENT_MODE }}
         deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
         template: ./bicep/basic-network.bicep
