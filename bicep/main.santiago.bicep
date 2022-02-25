@@ -88,7 +88,7 @@ resource firewallName_resource 'Microsoft.Network/azureFirewalls@2019-04-01' = {
 
         properties: {
           subnet: {
-            id: virtualNetworkName_resource.id
+            id: virtualNetworkName_resource.properties.subnets[1].id
           }
 
           publicIPAddress: {
