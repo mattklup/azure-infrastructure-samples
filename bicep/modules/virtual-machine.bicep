@@ -21,7 +21,7 @@ param networkSercurityGroupId string
 
 var virtualMachineName = name
 var virtualMachineSize = 'Standard_D2s_v3'
-var networkInterfaceName = '${name}-nic'
+var networkInterfaceName = '${name}-networkInterface'
 var publicIPAddressName = '${name}-publicIpAddress'
 
 resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = {
