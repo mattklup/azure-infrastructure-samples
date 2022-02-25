@@ -49,12 +49,10 @@ jobs:
 
     - name: Azure Login
       uses: azure/login@v1
-      if: env.AZURE_DEPLOYMENT_MODE != 'Validate'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Set current Azure Subscription and update environment variables
-      if: env.AZURE_DEPLOYMENT_MODE != 'Validate'
       run: |
         az account show
         echo "AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)" >> $GITHUB_ENV
@@ -62,7 +60,6 @@ jobs:
 
     - name: Create Azure Resource Group
       uses: Azure/CLI@v1
-      if: env.AZURE_DEPLOYMENT_MODE != 'Validate'
       with:
         inlineScript: |
           #!/bin/bash
@@ -74,7 +71,7 @@ jobs:
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME || 'mattklup-fake' }}
+        resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         deploymentMode: ${{ env.AZURE_DEPLOYMENT_MODE }}
         deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
         template: ./bicep/basic-network.bicep
