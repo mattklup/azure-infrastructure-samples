@@ -5,7 +5,7 @@ on:
     inputs:
       resource-group-name:
         required: false
-        description: Azure resource group name (Leave empty to default to your '{github_name}-{location}')
+        description: Azure resource group name (Leave empty to default to '{github_name}-{location}')
         type: string
       location:
         required: true
@@ -49,10 +49,12 @@ jobs:
 
     - name: Azure Login
       uses: azure/login@v1
+      if: env.AZURE_DEPLOYMENT_MODE != 'Validate'
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Set current Azure Subscription and update environment variables
+      if: env.AZURE_DEPLOYMENT_MODE != 'Validate'
       run: |
         az account show
         echo "AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)" >> $GITHUB_ENV
@@ -60,6 +62,7 @@ jobs:
 
     - name: Create Azure Resource Group
       uses: Azure/CLI@v1
+      if: env.AZURE_DEPLOYMENT_MODE != 'Validate'
       with:
         inlineScript: |
           #!/bin/bash
