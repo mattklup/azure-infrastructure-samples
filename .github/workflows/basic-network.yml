@@ -72,9 +72,6 @@ jobs:
         deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
         template: ./bicep/main.santiago.bicep
         failOnStdErr: false
-        parameters: >-
-          adminUserName="${{ github.actor }}"
-          publicSshKey="${{ secrets.SSH_PUB }}"
 
     - name: Save deployment output
       env:
