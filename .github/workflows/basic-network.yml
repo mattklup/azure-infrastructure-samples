@@ -27,11 +27,12 @@ on:
     branches:
     paths:
       - .github/workflows/basic-network.yml
-      - bicep/basic-network.bicep
+      - bicep/main-basic-network.bicep
       - bicep/modules/*.bicep
 
 env:
   IS_MAIN_PUSH: ${{ github.ref == 'refs/heads/main' }}
+  MAIN_BICEP_TEMPLATE_PATH: ./bicep/main-basic-network.bicep
   AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'westus2' }}
   AZURE_DEPLOYMENT_NAME: ${{ format('basic-network.{0}.{1}', github.actor, github.RUN_ID) }}
   AZURE_DEPLOYMENT_MODE: >-
@@ -74,7 +75,7 @@ jobs:
         resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP_NAME }}
         deploymentMode: ${{ env.AZURE_DEPLOYMENT_MODE }}
         deploymentName: ${{ env.AZURE_DEPLOYMENT_NAME }}
-        template: ./bicep/basic-network.bicep
+        template: ${{ env.MAIN_BICEP_TEMPLATE_PATH }}
         failOnStdErr: false
         parameters: >-
           adminUserName="${{ github.actor }}"

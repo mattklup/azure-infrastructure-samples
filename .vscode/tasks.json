@@ -11,7 +11,7 @@
                 "bicep",
                 "build",
                 "--file",
-                "${workspaceFolder}/bicep/basic-network.bicep",
+                "${workspaceFolder}/bicep/main-basic-network.bicep",
                 "--stdout"
             ],
             "group": {
