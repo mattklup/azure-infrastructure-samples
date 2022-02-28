@@ -64,7 +64,10 @@ jobs:
       with:
         inlineScript: |
           #!/bin/bash
-          az group create --name $AZURE_RESOURCE_GROUP_NAME --location $AZURE_RESOURCE_GROUP_LOCATION
+          az group create \
+            --name $AZURE_RESOURCE_GROUP_NAME \
+            --location $AZURE_RESOURCE_GROUP_LOCATION \
+            --tags branch="$GITHUB_REF_NAME" actor="$GITHUB_ACTOR" repository="$GITHUB_REPOSITORY"
           echo 🎉
 
     - name: Deploy Bicep templates 💪
