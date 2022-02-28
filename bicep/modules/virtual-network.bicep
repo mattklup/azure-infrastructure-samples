@@ -63,6 +63,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
   }
 }
 
+output virtualNetworkName string = virtualNetwork.name
 output subnets array = virtualNetwork.properties.subnets
 output dnsLabelPrefix string = dnsLabelPrefix
 output networkSercurityGroupId string = networkSecurityGroup.id

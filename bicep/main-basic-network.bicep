@@ -52,9 +52,9 @@ module virtualMachinePrivate 'modules/virtual-machine.bicep' = [for i in range(0
 }]
 
 module privateDnsZone 'modules/private-dns-zone.bicep' = if (deployPrivateDnsZone) {
-  name: name
+  name: 'privateDnsZone'
   params: {
-    virtualNetworkName: virtualNetwork.name
+    virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
   }
 }
 
