@@ -22,7 +22,7 @@ param networkSercurityGroupId string
 var depoyPublicIpAddress = !empty(dnsLabelPrefix)
 
 var virtualMachineName = name
-var virtualMachineSize = 'Standard_A2_v2'
+var virtualMachineSize = 'Standard_D2s_v3'
 var networkInterfaceName = '${name}-networkInterface'
 var publicIPAddressName = '${name}-publicIpAddress'
 
