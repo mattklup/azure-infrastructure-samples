@@ -50,7 +50,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-06-01' = {
           subnet: {
             id: subnetId
           }
-          publicIPAddress: {
+          publicIPAddress: empty(dnsLabelPrefix) ? {} : {
             id: publicIPAddress.id
           }
         }
@@ -105,4 +105,4 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2019-12-01' = {
   }
 }
 
-output hostname string = publicIPAddress.properties.dnsSettings.fqdn
+//output hostname string = publicIPAddress.properties.dnsSettings.fqdn
