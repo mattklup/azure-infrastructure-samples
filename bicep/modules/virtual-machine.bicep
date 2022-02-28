@@ -24,7 +24,7 @@ var virtualMachineSize = 'Standard_D2s_v3'
 var networkInterfaceName = '${name}-networkInterface'
 var publicIPAddressName = '${name}-publicIpAddress'
 
-resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = {
+resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = if (!empty(dnsLabelPrefix)) {
   name: publicIPAddressName
   location: location
   sku: {
