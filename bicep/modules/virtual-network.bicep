@@ -63,6 +63,13 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
   }
 }
 
+resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
+  name: name
+  location: location
+  properties: {
+  }
+}
+
 output subnets array = virtualNetwork.properties.subnets
 output dnsLabelPrefix string = dnsLabelPrefix
 output networkSercurityGroupId string = networkSecurityGroup.id
