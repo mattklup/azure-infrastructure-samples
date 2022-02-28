@@ -50,7 +50,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-06-01' = {
           subnet: {
             id: subnetId
           }
-          publicIPAddress: empty(dnsLabelPrefix) ? {} : {
+          publicIPAddress: empty(dnsLabelPrefix) ? null : {
             id: publicIPAddress.id
           }
         }
