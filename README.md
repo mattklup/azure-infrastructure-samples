@@ -31,6 +31,11 @@ chmod 400 ./ssh
 # Sample based on my workflow action
 ssh -i ./ssh <<user>>@<<name>>.<<location>>.cloudapp.azure.com
 
+# Use jumpbox to get to private vm
+eval "$(ssh-agent -s)"
+ssh-add ./<<your-private-ssh-key-file>
+# Sample dns labels provided: ssh -J user@public-jumpbox.com user@private-dns-name.com
+ssh -J mattklup@mattklup-test.westus2.cloudapp.azure.com mattklup@mattklup-test-0.mattklup-test.com
 ```
 
 ## Actions
