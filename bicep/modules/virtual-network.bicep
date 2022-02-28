@@ -10,7 +10,6 @@ var virtualNetworkName = name
 var networkSecurityGroupName = '${name}-nsgAllowRemoting'
 
 var subnetName = '${name}-subnet'
-// var subnetPrefix = '10.0.0.0/24'
 
 var subnets = [
   {

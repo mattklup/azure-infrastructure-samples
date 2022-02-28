@@ -19,14 +19,14 @@ param subnetId string
 @description('Network Sercurity Group Id for the virtual machine.')
 param networkSercurityGroupId string
 
-var depoyPublicIpAddress = !empty(dnsLabelPrefix)
+var deployPublicIpAddress = !empty(dnsLabelPrefix)
 
 var virtualMachineName = name
 var virtualMachineSize = 'Standard_D2s_v3'
 var networkInterfaceName = '${name}-networkInterface'
 var publicIPAddressName = '${name}-publicIpAddress'
 
-resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = if (depoyPublicIpAddress) {
+resource publicIPAddress 'Microsoft.Network/publicIPAddresses@2020-03-01' = if (deployPublicIpAddress) {
   name: publicIPAddressName
   location: location
   sku: {
@@ -52,7 +52,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-06-01' = {
           subnet: {
             id: subnetId
           }
-          publicIPAddress: !depoyPublicIpAddress ? null : {
+          publicIPAddress: !deployPublicIpAddress ? null : {
             id: publicIPAddress.id
           }
         }
@@ -107,4 +107,4 @@ resource virtualMachine 'Microsoft.Compute/virtualMachines@2019-12-01' = {
   }
 }
 
-output hostname string = depoyPublicIpAddress ? publicIPAddress.properties.dnsSettings.fqdn : 'NA'
+output hostname string = deployPublicIpAddress ? publicIPAddress.properties.dnsSettings.fqdn : 'NA'
