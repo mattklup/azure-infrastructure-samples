@@ -22,6 +22,11 @@ on:
         - Complete
         - Incremental
         - Validate
+      private-storage-endpoint:
+        required: true
+        description: Azure Storage only accessible from vnet
+        type: boolean
+        default: false
 
   push:
     branches:
@@ -40,6 +45,8 @@ env:
       github.event.inputs.deployment-mode || 
       (github.ref == 'refs/heads/main' && 'Complete' || 'Validate')
     }}
+  AZURE_DEPLOYMENT_USE_PRIVATE_STORAGE_ENDPOINT: ${{ github.event.inputs.private-storage-endpoint || 'false' }}
+  
 
 jobs:
   deploy:
@@ -83,6 +90,7 @@ jobs:
         parameters: >-
           adminUserName="${{ github.actor }}"
           publicSshKey="${{ secrets.SSH_PUB }}"
+          storageAccountUsesPrivateEndpoint=${{ env.AZURE_DEPLOYMENT_USE_PRIVATE_STORAGE_ENDPOINT }}
 
     - name: Save deployment output
       env:
