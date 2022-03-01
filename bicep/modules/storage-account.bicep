@@ -25,7 +25,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing 
   name: virtualNetworkName
 }
 
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!empty(virtualNetworkName)) {
   name: '${name}-privateEndpoint'
   location: location
   properties: {
@@ -54,10 +54,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     name: storageAccountSku
   }
   properties: {
-    networkAcls: {
+    networkAcls: (!empty(virtualNetworkName)) ? {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
-    }
+    } : null
   }
 }
 

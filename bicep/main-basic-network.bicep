@@ -66,6 +66,7 @@ module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount
   params: {
     name: name
     location: location
+    virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
   }
 }
 
