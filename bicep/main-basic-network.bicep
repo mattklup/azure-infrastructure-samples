@@ -13,6 +13,9 @@ param publicSshKey string
 @description('Deploy private Dns Zone.')
 param deployPrivateDnsZone bool = true
 
+@description('Deploy azure storage account.')
+param deployStorageAccount bool = true
+
 @description('Number of vms to deploy.')
 var privateVmCount = 2
 
@@ -58,6 +61,14 @@ module privateDnsZone 'modules/private-dns-zone.bicep' = if (deployPrivateDnsZon
   }
 }
 
+module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount) {
+  name: 'storageAccount'
+  params: {
+    name: name
+    location: location
+  }
+}
+
 output virtualNetworkDnsLabelPrefix string = virtualNetwork.outputs.dnsLabelPrefix
 output virtualNetworkNetworkSercurityGroupId string = virtualNetwork.outputs.networkSercurityGroupId
 output virtualNetworkSubnetId array = virtualNetwork.outputs.subnets
@@ -69,3 +80,4 @@ output virtualMachineJumpBox object = {
   hostName: virtualMachineJumpbox.outputs.hostname
 }
 
+output storageAccountName string = deployStorageAccount ? storageAccount.outputs.storageAccountName : 'NA'
