@@ -47,6 +47,9 @@ Workflows are provided to deploy bicep files.  See the [descriptions](bicep/READ
 After connecting to a network, you can do some things to validate your network.
 
 ```bash
+# Install az
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
 # Install nmap
 sudo apt-get install nmap
 

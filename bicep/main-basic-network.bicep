@@ -13,6 +13,12 @@ param publicSshKey string
 @description('Deploy private Dns Zone.')
 param deployPrivateDnsZone bool = true
 
+@description('Deploy azure storage account.')
+param deployStorageAccount bool = true
+
+@description('If deploying an azure storage account, configure private endpoint.')
+param storageAccountUsesPrivateEndpoint bool = false
+
 @description('Number of vms to deploy.')
 var privateVmCount = 2
 
@@ -34,7 +40,6 @@ module virtualMachineJumpbox 'modules/virtual-machine.bicep' = {
     publicSshKey: publicSshKey
     dnsLabelPrefix: virtualNetwork.outputs.dnsLabelPrefix
     subnetId: virtualNetwork.outputs.subnets[0].id
-    networkSercurityGroupId: virtualNetwork.outputs.networkSercurityGroupId
   }
 }
 
@@ -47,13 +52,31 @@ module virtualMachinePrivate 'modules/virtual-machine.bicep' = [for i in range(0
     adminUserName: adminUserName
     publicSshKey: publicSshKey
     subnetId: virtualNetwork.outputs.subnets[1].id
-    networkSercurityGroupId: virtualNetwork.outputs.networkSercurityGroupId
   }
 }]
 
 module privateDnsZone 'modules/private-dns-zone.bicep' = if (deployPrivateDnsZone) {
   name: 'privateDnsZone'
   params: {
+    virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
+  }
+}
+
+module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount) {
+  name: 'storageAccount'
+  params: {
+    name: name
+    location: location
+    usePrivateEndpoint: storageAccountUsesPrivateEndpoint
+  }
+}
+
+module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.bicep' = if (deployStorageAccount && storageAccountUsesPrivateEndpoint) {
+  name: 'storageAccountPrivateEndpoint'
+  params: {
+    name: name
+    location: location
+    storageAccountName: storageAccount.outputs.storageAccountName
     virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
   }
 }
@@ -69,3 +92,4 @@ output virtualMachineJumpBox object = {
   hostName: virtualMachineJumpbox.outputs.hostname
 }
 
+output storageAccountName string = deployStorageAccount ? storageAccount.outputs.storageAccountName : 'NA'

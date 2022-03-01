@@ -13,15 +13,20 @@ var subnetName = '${name}-subnet'
 
 var subnets = [
   {
-    name: '${subnetName}-0'
+    name: '${subnetName}-jumpbox'
     properties: {
       addressPrefix: '10.0.0.0/24'
+      networkSecurityGroup: {
+        id: networkSecurityGroup.id
+      }
     }
   }
   {
-    name: '${subnetName}-1'
+    name: '${subnetName}-internal'
     properties: {
       addressPrefix: '10.0.1.0/24'
+      privateEndpointNetworkPolicies: 'Disabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
     }
   }
 ]
