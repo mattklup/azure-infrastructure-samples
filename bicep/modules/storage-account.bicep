@@ -79,6 +79,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     name: storageAccountSku
   }
   properties: {
+    allowBlobPublicAccess: false
     networkAcls: (!empty(virtualNetworkName)) ? {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
