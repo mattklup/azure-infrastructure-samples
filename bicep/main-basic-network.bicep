@@ -67,11 +67,18 @@ module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount
   params: {
     name: name
     location: location
-    virtualNetworkName: storageAccountUsesPrivateEndpoint ? virtualNetwork.outputs.virtualNetworkName : ''
+    usePrivateEndpoint: storageAccountUsesPrivateEndpoint
   }
-  dependsOn: [
-    virtualNetwork
-  ]
+}
+
+module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.bicep' = if (deployStorageAccount && storageAccountUsesPrivateEndpoint) {
+  name: 'storageAccountPrivateEndpoint'
+  params: {
+    name: name
+    location: location
+    storageAccountName: storageAccount.outputs.storageAccountName
+    virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
+  }
 }
 
 output virtualNetworkDnsLabelPrefix string = virtualNetwork.outputs.dnsLabelPrefix
