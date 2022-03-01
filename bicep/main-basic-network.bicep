@@ -50,7 +50,6 @@ module virtualMachinePrivate 'modules/virtual-machine.bicep' = [for i in range(0
     adminUserName: adminUserName
     publicSshKey: publicSshKey
     subnetId: virtualNetwork.outputs.subnets[1].id
-    networkSercurityGroupId: virtualNetwork.outputs.networkSercurityGroupId
   }
 }]
 

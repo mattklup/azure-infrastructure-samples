@@ -4,20 +4,20 @@ param location string = resourceGroup().location
 @description('Base name for the virtual machine.')
 param name string = resourceGroup().name
 
-@description('User name for the virtual machine.')
-param adminUserName string = 'sampleAdmin'
+@description('User name for the virtual machine  (Optional: default "azure-user").')
+param adminUserName string = 'azure-user'
 
 @description('Public SSH key for the virtual machine.')
 param publicSshKey string
 
-@description('DNS label prefix for the virtual machine.  If not provided the virtual machine will not have a public IP address.')
+@description('DNS label prefix for the virtual machine (Optional).  If not provided the virtual machine will not have a public IP address.')
 param dnsLabelPrefix string = ''
 
 @description('Subnet ID for the virtual machine.')
 param subnetId string
 
-@description('Network Sercurity Group Id for the virtual machine.')
-param networkSercurityGroupId string
+@description('Network Sercurity Group Id for the virtual machine (Optional).')
+param networkSercurityGroupId string = ''
 
 var deployPublicIpAddress = !empty(dnsLabelPrefix)
 
@@ -58,7 +58,7 @@ resource networkInterface 'Microsoft.Network/networkInterfaces@2020-06-01' = {
         }
       }
     ]
-    networkSecurityGroup: {
+    networkSecurityGroup: empty(networkSercurityGroupId) ? null : {
       id: networkSercurityGroupId
     }
   }

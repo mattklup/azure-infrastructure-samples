@@ -4,7 +4,7 @@ param name string = resourceGroup().name
 @description('Location for the storage account.')
 param location string = resourceGroup().location
 
-@description('Existing virtualNetwork name to use for a private endpoint.')
+@description('Existing virtual network name to use for a private endpoint  (Optional).')
 param virtualNetworkName string = ''
 
 @allowed([

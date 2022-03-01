@@ -1,4 +1,4 @@
-@description('Existing virtualNetwork name.')
+@description('Existing virtual network name.')
 param virtualNetworkName string
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing = {
