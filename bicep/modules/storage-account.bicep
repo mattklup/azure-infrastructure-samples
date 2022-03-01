@@ -62,7 +62,7 @@ resource blobPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetwor
   name: '${virtualNetwork.name}-blob-link'
   location: 'global'
   properties: {
-    registrationEnabled: true
+    registrationEnabled: false
     virtualNetwork: {
       id: virtualNetwork.id
     }
