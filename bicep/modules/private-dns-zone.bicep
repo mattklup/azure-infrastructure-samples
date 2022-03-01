@@ -8,8 +8,6 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
   name: '${virtualNetworkName}.com'
   location: 'global'
-  properties: {
-  }
 }
 
 resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
@@ -23,3 +21,5 @@ resource privateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLin
     }
   }
 }
+
+output privateDnsZoneName string = privateDnsZone.name

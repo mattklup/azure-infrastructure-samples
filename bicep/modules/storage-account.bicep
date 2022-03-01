@@ -19,6 +19,7 @@ param virtualNetworkName string = ''
 ])
 param storageAccountSku string = 'Standard_LRS'
 
+var blobPrivateDnsZoneName = 'privatelink.blob.${environment().suffixes.storage}'
 var storageAccountName = toLower(take(replace(replace(name, '-', ''), '_', ''), 24))
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing = if (!empty(virtualNetworkName)) {
@@ -40,6 +41,30 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!
           groupIds: [
             'blob'
           ]
+          privateLinkServiceConnectionState: {
+            status: 'Approved'
+            description: 'Auto-Approved'
+            actionsRequired: 'None'
+          }
+        }
+      }
+    ]
+  }
+}
+
+resource blobPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-01-01' = {
+  name: blobPrivateDnsZoneName
+  location: 'global'
+}
+
+resource privateEndpointDns 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-06-01' = {
+  name: '${privateEndpoint.name}/blob-PrivateDnsZoneGroup'
+  properties:{
+    privateDnsZoneConfigs: [
+      {
+        name: blobPrivateDnsZoneName
+        properties:{
+          privateDnsZoneId: blobPrivateDnsZone.id
         }
       }
     ]
@@ -58,6 +83,16 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
     } : null
+    encryption: {
+      services: {
+        blob: {
+          enabled: true
+          keyType: 'Account'
+        }
+      }
+      keySource: 'Microsoft.Storage'
+      requireInfrastructureEncryption: false
+    }
   }
 }
 
