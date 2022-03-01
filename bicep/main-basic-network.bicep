@@ -37,7 +37,6 @@ module virtualMachineJumpbox 'modules/virtual-machine.bicep' = {
     publicSshKey: publicSshKey
     dnsLabelPrefix: virtualNetwork.outputs.dnsLabelPrefix
     subnetId: virtualNetwork.outputs.subnets[0].id
-    networkSercurityGroupId: virtualNetwork.outputs.networkSercurityGroupId
   }
 }
 

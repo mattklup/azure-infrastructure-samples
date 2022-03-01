@@ -16,6 +16,9 @@ var subnets = [
     name: '${subnetName}-jumpbox'
     properties: {
       addressPrefix: '10.0.0.0/24'
+      networkSecurityGroup: {
+        id: networkSecurityGroup.id
+      }
     }
   }
   {
@@ -23,7 +26,12 @@ var subnets = [
     properties: {
       addressPrefix: '10.0.1.0/24'
       privateEndpointNetworkPolicies: 'Disabled'
-      privateLinkServiceNetworkPolicies: 'Enabled'
+      privateLinkServiceNetworkPolicies: 'Disabled'
+      serviceEndpoints: [
+        {
+          service: 'Microsoft.Storage'
+        }
+      ]
     }
   }
 ]
