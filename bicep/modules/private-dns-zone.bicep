@@ -6,7 +6,7 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing 
 }
 
 resource privateDnsZone 'Microsoft.Network/privateDnsZones@2020-06-01' = {
-  name: '${virtualNetworkName}.com'
+  name: '${virtualNetworkName}.net'
   location: 'global'
 }
 

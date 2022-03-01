@@ -26,12 +26,7 @@ var subnets = [
     properties: {
       addressPrefix: '10.0.1.0/24'
       privateEndpointNetworkPolicies: 'Disabled'
-      privateLinkServiceNetworkPolicies: 'Disabled'
-      serviceEndpoints: [
-        {
-          service: 'Microsoft.Storage'
-        }
-      ]
+      privateLinkServiceNetworkPolicies: 'Enabled'
     }
   }
 ]

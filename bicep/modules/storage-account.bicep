@@ -17,7 +17,7 @@ param virtualNetworkName string = ''
   'Standard_GZRS'
   'Standard_RAGZRS'
 ])
-param storageAccountSku string = 'Standard_LRS'
+param storageAccountSku string = 'Standard_RAGRS'
 
 var blobPrivateDnsZoneName = 'privatelink.blob.${environment().suffixes.storage}'
 var storageAccountName = toLower(take(replace(replace(name, '-', ''), '_', ''), 24))
@@ -57,6 +57,19 @@ resource blobPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-01-01' = {
   location: 'global'
 }
 
+resource blobPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+  parent: blobPrivateDnsZone
+  name: '${virtualNetwork.name}-blob-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: true
+    virtualNetwork: {
+      id: virtualNetwork.id
+    }
+  }
+}
+
+
 resource privateEndpointDns 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-06-01' = {
   name: '${privateEndpoint.name}/blob-PrivateDnsZoneGroup'
   properties:{
@@ -71,7 +84,7 @@ resource privateEndpointDns 'Microsoft.Network/privateEndpoints/privateDnsZoneGr
   }
 }
 
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: storageAccountName
   kind: 'StorageV2'
   location: location
@@ -79,21 +92,11 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-04-01' = {
     name: storageAccountSku
   }
   properties: {
-    allowBlobPublicAccess: false
+    minimumTlsVersion: 'TLS1_2'
     networkAcls: (!empty(virtualNetworkName)) ? {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
     } : null
-    encryption: {
-      services: {
-        blob: {
-          enabled: true
-          keyType: 'Account'
-        }
-      }
-      keySource: 'Microsoft.Storage'
-      requireInfrastructureEncryption: false
-    }
   }
 }
 
