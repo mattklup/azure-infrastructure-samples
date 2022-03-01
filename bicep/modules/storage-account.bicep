@@ -19,14 +19,15 @@ param virtualNetworkName string = ''
 ])
 param storageAccountSku string = 'Standard_RAGRS'
 
-var blobPrivateDnsZoneName = 'privatelink.blob.${environment().suffixes.storage}'
+var usePrivateEndpoint = !empty(virtualNetworkName)
 var storageAccountName = toLower(take(replace(replace(name, '-', ''), '_', ''), 24))
+var blobPrivateDnsZoneName = 'privatelink.blob.${environment().suffixes.storage}'
 
-resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing = if (!empty(virtualNetworkName)) {
+resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' existing = if (usePrivateEndpoint) {
   name: virtualNetworkName
 }
 
-resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!empty(virtualNetworkName)) {
+resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (usePrivateEndpoint) {
   name: '${name}-privateEndpoint'
   location: location
   properties: {
@@ -52,12 +53,12 @@ resource privateEndpoint 'Microsoft.Network/privateEndpoints@2021-05-01' = if (!
   }
 }
 
-resource blobPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-01-01' = {
+resource blobPrivateDnsZone 'Microsoft.Network/privateDnsZones@2020-01-01' = if (usePrivateEndpoint) {
   name: blobPrivateDnsZoneName
   location: 'global'
 }
 
-resource blobPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = {
+resource blobPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2020-06-01' = if (usePrivateEndpoint) {
   parent: blobPrivateDnsZone
   name: '${virtualNetwork.name}-blob-link'
   location: 'global'
@@ -69,8 +70,7 @@ resource blobPrivateDnsZoneLink 'Microsoft.Network/privateDnsZones/virtualNetwor
   }
 }
 
-
-resource privateEndpointDns 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-06-01' = {
+resource privateEndpointDns 'Microsoft.Network/privateEndpoints/privateDnsZoneGroups@2020-06-01' = if (usePrivateEndpoint) {
   name: '${privateEndpoint.name}/blob-PrivateDnsZoneGroup'
   properties:{
     privateDnsZoneConfigs: [
@@ -93,7 +93,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   }
   properties: {
     minimumTlsVersion: 'TLS1_2'
-    networkAcls: (!empty(virtualNetworkName)) ? {
+    networkAcls: usePrivateEndpoint ? {
       bypass: 'AzureServices'
       defaultAction: 'Deny'
     } : null

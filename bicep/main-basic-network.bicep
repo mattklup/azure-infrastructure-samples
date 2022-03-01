@@ -16,6 +16,9 @@ param deployPrivateDnsZone bool = true
 @description('Deploy azure storage account.')
 param deployStorageAccount bool = true
 
+@description('If deploying an azure storage account, configure private endpoint.')
+param storageAccountUsesPrivateEndpoint bool = false
+
 @description('Number of vms to deploy.')
 var privateVmCount = 2
 
@@ -64,7 +67,7 @@ module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount
   params: {
     name: name
     location: location
-    virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
+    virtualNetworkName: storageAccountUsesPrivateEndpoint ? virtualNetwork.outputs.virtualNetworkName : ''
   }
 }
 
