@@ -82,7 +82,6 @@ module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.b
 }
 
 output virtualNetworkDnsLabelPrefix string = virtualNetwork.outputs.dnsLabelPrefix
-output virtualNetworkNetworkSercurityGroupId string = virtualNetwork.outputs.networkSercurityGroupId
 output virtualNetworkSubnetId array = virtualNetwork.outputs.subnets
 output virtualMachinesPrivate array = [for i in range(0, privateVmCount): {
   name: virtualMachinePrivate[i].name

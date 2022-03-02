@@ -6,32 +6,37 @@ param name string = resourceGroup().name
 
 var dnsLabelPrefix = toLower(name)
 var addressPrefix = '10.0.0.0/16'
+var subnetAddressPrefixJumpbox = '10.0.0.0/24'
+var subnetAddressPrefixInternal = '10.0.1.0/24'
 var virtualNetworkName = name
 var networkSecurityGroupName = '${name}-nsgAllowRemoting'
 
 var subnetName = '${name}-subnet'
 
-var subnets = [
-  {
-    name: '${subnetName}-jumpbox'
-    properties: {
-      addressPrefix: '10.0.0.0/24'
-      networkSecurityGroup: {
-        id: networkSecurityGroup.id
+resource networkSecurityGroupDenySshInternal 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
+  name: networkSecurityGroupName
+  location: location
+  properties: {
+    securityRules: [
+      {
+        name: 'DenySshInVnet'
+        properties: {
+          description: 'Allow SSH'
+          protocol: 'Tcp'
+          sourcePortRange: '*'
+          destinationPortRange: '22'
+          sourceAddressPrefix: subnetAddressPrefixInternal
+          destinationAddressPrefix: subnetAddressPrefixInternal
+          access: 'Deny'
+          priority: 100
+          direction: 'Inbound'
+        }
       }
-    }
+    ]
   }
-  {
-    name: '${subnetName}-internal'
-    properties: {
-      addressPrefix: '10.0.1.0/24'
-      privateEndpointNetworkPolicies: 'Disabled'
-      privateLinkServiceNetworkPolicies: 'Enabled'
-    }
-  }
-]
+}
 
-resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
+resource networkSecurityGroupAllSshToJumpbox 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
   name: networkSecurityGroupName
   location: location
   properties: {
@@ -54,6 +59,29 @@ resource networkSecurityGroup 'Microsoft.Network/networkSecurityGroups@2020-03-0
   }
 }
 
+var subnets = [
+  {
+    name: '${subnetName}-jumpbox'
+    properties: {
+      addressPrefix: subnetAddressPrefixJumpbox
+      networkSecurityGroup: {
+        id: networkSecurityGroupAllSshToJumpbox.id
+      }
+    }
+  }
+  {
+    name: '${subnetName}-internal'
+    properties: {
+      addressPrefix: subnetAddressPrefixInternal
+      privateEndpointNetworkPolicies: 'Disabled'
+      privateLinkServiceNetworkPolicies: 'Enabled'
+      networkSecurityGroup: {
+        id: networkSecurityGroupDenySshInternal.id
+      }
+    }
+  }
+]
+
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
   name: virtualNetworkName
   location: location
@@ -67,7 +95,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
   }
 }
 
+resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' = {
+  name: name
+  location: location
+}
+
 output virtualNetworkName string = virtualNetwork.name
 output subnets array = virtualNetwork.properties.subnets
 output dnsLabelPrefix string = dnsLabelPrefix
-output networkSercurityGroupId string = networkSecurityGroup.id
