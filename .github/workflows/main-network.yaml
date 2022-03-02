@@ -1,4 +1,4 @@
-name: deploy basic network
+name: deploy main network (new-vnet)
 
 on:
   workflow_dispatch:
