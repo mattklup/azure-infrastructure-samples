@@ -82,8 +82,8 @@ jobs:
         template: ${{ env.MAIN_BICEP_TEMPLATE_PATH }}
         failOnStdErr: false
         parameters: >-
-          name="${{ resource-group-name }}"
-          location="${{ location }}"
+          name="${{ github.event.inputs.resource-group-name }}"
+          location="${{ github.event.inputs.location }}"
 
     - name: Save deployment output
       env:
