@@ -9,12 +9,11 @@ var addressPrefix = '10.0.0.0/16'
 var subnetAddressPrefixJumpbox = '10.0.0.0/24'
 var subnetAddressPrefixInternal = '10.0.1.0/24'
 var virtualNetworkName = name
-var networkSecurityGroupName = '${name}-nsgAllowRemoting'
 
 var subnetName = '${name}-subnet'
 
 resource networkSecurityGroupDenySshInternal 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
-  name: networkSecurityGroupName
+  name: '${name}-denySshInternal'
   location: location
   properties: {
     securityRules: [
@@ -36,8 +35,8 @@ resource networkSecurityGroupDenySshInternal 'Microsoft.Network/networkSecurityG
   }
 }
 
-resource networkSecurityGroupAllSshToJumpbox 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
-  name: networkSecurityGroupName
+resource networkSecurityGroupAllowSshToJumpbox 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
+  name: '${name}-allowSshToJumpbox'
   location: location
   properties: {
     securityRules: [
