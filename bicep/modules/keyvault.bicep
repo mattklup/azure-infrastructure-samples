@@ -32,8 +32,8 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
         }
         tenantId: 'string'
       }
-    ]*/
-    createMode: 'string'
+    ]
+    createMode: 'string'*/
     // Azure VMs are permitted to retrieve certs stored as secrets
     enabledForDeployment: true
     // I don't think ARM needs to retrieve secrets yet
