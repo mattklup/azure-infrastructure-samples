@@ -64,7 +64,7 @@ var subnets = [
     properties: {
       addressPrefix: subnetAddressPrefixJumpbox
       networkSecurityGroup: {
-        id: networkSecurityGroupAllSshToJumpbox.id
+        id: networkSecurityGroupAllowSshToJumpbox.id
       }
     }
   }
