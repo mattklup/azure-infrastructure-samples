@@ -94,10 +94,12 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
   }
 }
 
+/*
 resource networkWatcher 'Microsoft.Network/networkWatchers@2021-05-01' = {
   name: name
   location: location
 }
+*/
 
 output virtualNetworkName string = virtualNetwork.name
 output subnets array = virtualNetwork.properties.subnets

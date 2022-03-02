@@ -43,7 +43,7 @@ env:
   AZURE_DEPLOYMENT_MODE: >-
     ${{ 
       github.event.inputs.deployment-mode ||
-      (github.ref == 'refs/heads/main' && 'Complete' || 'Validate')
+      ((github.ref == 'refs/heads/main' || contains(github.ref, 'deploy')) && 'Complete' || 'Validate')
     }}
   AZURE_DEPLOYMENT_USE_PRIVATE_STORAGE_ENDPOINT: ${{ github.event.inputs.private-storage-endpoint || 'false' }}
   
