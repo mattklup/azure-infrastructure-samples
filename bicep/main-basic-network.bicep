@@ -89,6 +89,16 @@ module keyvault 'modules/keyvault.bicep' = {
   }
 }
 
+module sslCert 'modules/ssl-cert.bicep' = {
+  name: 'sslCert'
+  params: {
+    name: name
+    location: location
+    cname: 'tmp'
+  }
+}
+
+
 output virtualNetworkDnsLabelPrefix string = virtualNetwork.outputs.dnsLabelPrefix
 output virtualNetworkNetworkSercurityGroupId string = virtualNetwork.outputs.networkSercurityGroupId
 output virtualNetworkSubnetId array = virtualNetwork.outputs.subnets

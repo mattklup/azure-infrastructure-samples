@@ -1,8 +1,8 @@
 @description('Base name for the keyvault.')
-param name string = resourceGroup().name
+param name string
 
 @description('Location for the storage account.')
-param location string = resourceGroup().location
+param location string
 
 resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
   name: name
