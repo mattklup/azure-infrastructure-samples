@@ -84,7 +84,7 @@ module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.b
 module keyvault 'modules/keyvault.bicep' = {
   name: 'keyvault'
   params: {
-    name: '${name}-keyvault'
+    name: name
     location: location
   }
 }
