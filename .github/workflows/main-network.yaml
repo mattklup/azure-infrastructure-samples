@@ -65,7 +65,7 @@ jobs:
       run: >-
         echo "::set-output name=networkWatcherExists::$(
           az network watcher list \
-            --query "[?location == '${{ env.AZURE_RESOURCE_GROUP_LOCATION }}'].name | length(@) + 1"
+            --query "[?location == '${{ env.AZURE_RESOURCE_GROUP_LOCATION }}'].name | length(@)"
         )"
     
     - name: Show watcher
