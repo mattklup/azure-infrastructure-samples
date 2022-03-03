@@ -189,7 +189,7 @@ resource privateDnsZonesLink 'Microsoft.Network/privateDnsZones/virtualNetworkLi
 // }
 
 resource networkWatcher 'Microsoft.Network/networkWatchers@2020-11-01' = if (!networkWatcherExists) {
-  name: 'NetworkkWatcher_${location}'
+  name: 'NetworkWatcher_${location}'
   location: location
 }
 
