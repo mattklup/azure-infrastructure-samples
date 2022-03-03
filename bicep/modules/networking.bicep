@@ -150,6 +150,25 @@ resource privateDnsZonesLink 'Microsoft.Network/privateDnsZones/virtualNetworkLi
   }
 }
 
+// This is not needed but keeping around to show defaults
+//
+// resource dnsRecordSoa 'Microsoft.Network/privateDnsZones/SOA@2018-09-01' = {
+//   parent: dnsZone
+//   name: '@'
+//   properties: {
+//     ttl: 3600
+//     soaRecord: {
+//       email: 'azureprivatedns-host.microsoft.com'
+//       expireTime: 2419200
+//       host: 'azureprivatedns.net'
+//       minimumTtl: 10
+//       refreshTime: 3600
+//       retryTime: 300
+//       serialNumber: 1
+//     }
+//   }
+// }
+
 
 resource dnsRecordJumpbox 'Microsoft.Network/privateDnsZones/A@2018-09-01' = {
   parent: dnsZone
