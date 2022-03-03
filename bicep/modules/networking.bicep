@@ -6,7 +6,6 @@ param name string = resourceGroup().name
 
 var dnsLabelPrefix = toLower(name)
 var addressPrefix = '10.0.0.0/16'
-var virtualNetworkName = name
 var networkSecurityGroupName = '${name}-nsg'
 var subnetName = '${name}-subnet'
 
@@ -118,7 +117,7 @@ resource backendNsg 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
 }
 
 resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
-  name: virtualNetworkName
+  name: name
   location: location
   properties: {
     addressSpace: {
