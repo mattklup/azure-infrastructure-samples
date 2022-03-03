@@ -170,31 +170,21 @@ resource privateDnsZonesLink 'Microsoft.Network/privateDnsZones/virtualNetworkLi
 // }
 
 
-resource dnsRecordJumpbox 'Microsoft.Network/privateDnsZones/A@2018-09-01' = {
-  parent: dnsZone
-  name: 'jumpbox'
-  properties: {
-    ttl: 3600
-    aRecords: [
-      {
-        ipv4Address: '0.0.0.0'
-      }
-    ]
-  }
-}
+// Keeping this here for reference on how to create a record 
+//
+// resource dnsRecordJumpbox 'Microsoft.Network/privateDnsZones/A@2018-09-01' = {
+//   parent: dnsZone
+//   name: 'jumpbox'
+//   properties: {
+//     ttl: 3600
+//     aRecords: [
+//       {
+//         ipv4Address: '0.0.0.0'
+//       }
+//     ]
+//   }
+// }
 
-resource dnsRecordApp 'Microsoft.Network/privateDnsZones/A@2018-09-01' = {
-  parent: dnsZone
-  name: 'app'
-  properties: {
-    ttl: 3600
-    aRecords: [
-      {
-        ipv4Address: '0.0.0.0'
-      }
-    ]
-  }
-}
 
 output virtualNetworkName string = virtualNetwork.name
 output subnets array = virtualNetwork.properties.subnets
