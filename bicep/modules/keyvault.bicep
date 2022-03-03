@@ -14,13 +14,12 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
     // Azure VMs are permitted to retrieve certs stored as secrets
     enabledForDeployment: true
     // I don't think ARM needs to retrieve secrets yet
-    enabledForTemplateDeployment: false
     enableRbacAuthorization: true
     sku: {
       family: 'A'
       name: 'standard'
     }
-    softDeleteRetentionInDays: 15
-    tenantId: '72f988bf-86f1-41af-91ab-2d7cd011db47'
+    enableSoftDelete: false
+    tenantId: subscription().tenantId
   }
 }
