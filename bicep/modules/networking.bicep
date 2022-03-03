@@ -8,7 +8,7 @@ param name string = resourceGroup().name
 param dnsName string = 'csedemos.com'
 
 @description('Network Watcher exists')
-param networkWatcherExists bool = true
+param networkWatcherExists bool
 
 var dnsLabelPrefix = toLower(name)
 var addressPrefix = '10.0.0.0/16'
