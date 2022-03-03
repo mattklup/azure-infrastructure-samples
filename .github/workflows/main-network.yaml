@@ -12,8 +12,15 @@ on:
         description: Azure resource group location
         type: choice
         options:
-        - westus2
         - centralus
+        - eastus
+        - eastus2
+        - northcentralus
+        - southcentralus
+        - westcentralus
+        - westus
+        - westus2
+        - westus3
       deployment-mode:
         required: true
         description: Azure deployment mode
