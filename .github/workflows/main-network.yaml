@@ -67,6 +67,10 @@ jobs:
           az network watcher list \
             --query "[?location == '${{ env.AZURE_RESOURCE_GROUP_LOCATION }}'].name | length(@)"
         )"
+    
+    - name: Show watcher
+      run: |
+        echo 
 
     - name: Create Azure Resource Group
       uses: Azure/CLI@v1
@@ -92,7 +96,7 @@ jobs:
         parameters: >-
           name="${{ env.AZURE_RESOURCE_GROUP_NAME }}"
           location="${{ env.AZURE_RESOURCE_GROUP_LOCATION }}"
-          networkWatcherExists=${{ steps.check-for-network-watcher }}
+          networkWatcherExists=${{ steps.check-for-network-watcher.outputs.networkWatcherExists }}
 
     - name: Save deployment output
       env:
