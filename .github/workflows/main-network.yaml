@@ -66,18 +66,6 @@ jobs:
         az account show
         echo "AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)" >> $GITHUB_ENV
         echo "AZURE_RESOURCE_GROUP_NAME=${{ github.event.inputs.resource-group-name || format('{0}-{1}', github.actor, env.AZURE_RESOURCE_GROUP_LOCATION) }}" >> $GITHUB_ENV
-  
-    - name: Check if network watcher exists ❔
-      id: check-for-network-watcher
-      run: >-
-        echo "::set-output name=networkWatcherExists::$(
-          az network watcher list \
-            --query "[?location == '${{ env.AZURE_RESOURCE_GROUP_LOCATION }}'].name | length(@)"
-        )"
-    
-    - name: Show watcher
-      run: |
-        echo 
 
     - name: Create Azure Resource Group
       uses: Azure/CLI@v1
@@ -103,7 +91,6 @@ jobs:
         parameters: >-
           name="${{ env.AZURE_RESOURCE_GROUP_NAME }}"
           location="${{ env.AZURE_RESOURCE_GROUP_LOCATION }}"
-          networkWatcherExists=${{ steps.check-for-network-watcher.outputs.networkWatcherExists }}
 
     - name: Save deployment output
       env:
