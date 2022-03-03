@@ -29,7 +29,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
   }
 }
 
-resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+/*resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
   name: 'keyvaultRole'
   scope: keyVault
   properties: {
@@ -39,7 +39,7 @@ resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04
   }
 }
 
-/*resource generateScript 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
+resource generateScript 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
   dependsOn: [
     keyVaultRoleAssignment
   ]
