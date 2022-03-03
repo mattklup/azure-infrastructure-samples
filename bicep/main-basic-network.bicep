@@ -89,14 +89,14 @@ module keyvault 'modules/keyvault.bicep' = {
   }
 }
 
-module sslCert 'modules/ssl-cert.bicep' = {
+/*module sslCert 'modules/ssl-cert.bicep' = {
   name: 'sslCert'
   params: {
     name: name
     location: location
     cname: 'tmp'
   }
-}
+}*/
 
 
 output virtualNetworkDnsLabelPrefix string = virtualNetwork.outputs.dnsLabelPrefix
