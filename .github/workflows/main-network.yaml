@@ -103,7 +103,7 @@ jobs:
         parameters: >-
           name="${{ env.AZURE_RESOURCE_GROUP_NAME }}"
           location="${{ env.AZURE_RESOURCE_GROUP_LOCATION }}"
-          networkWatcherExists=${{ steps.check-for-network-watcher.outputs.networkWatcherExists }}
+          networkWatcherExists=1
 
     - name: Save deployment output
       env:
