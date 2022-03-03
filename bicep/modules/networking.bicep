@@ -188,10 +188,10 @@ resource privateDnsZonesLink 'Microsoft.Network/privateDnsZones/virtualNetworkLi
 //   }
 // }
 
-resource networkWatcher 'Microsoft.Network/networkWatchers@2020-11-01' = if (!networkWatcherExists) {
-  name: 'NetworkWatcher_${location}'
-  location: location
-}
+// resource networkWatcher 'Microsoft.Network/networkWatchers@2020-11-01' = if (!networkWatcherExists) {
+//   name: 'NetworkWatcher_${location}'
+//   location: location
+// }
 
 output virtualNetworkName string = virtualNetwork.name
 output subnets array = virtualNetwork.properties.subnets
