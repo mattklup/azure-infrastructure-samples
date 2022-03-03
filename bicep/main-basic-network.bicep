@@ -81,6 +81,14 @@ module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.b
   }
 }
 
+module keyvault 'modules/keyvault.bicep' = {
+  name: 'keyvault'
+  params: {
+    name: name
+    location: location
+  }
+}
+
 output virtualNetworkDnsLabelPrefix string = virtualNetwork.outputs.dnsLabelPrefix
 output virtualNetworkNetworkSercurityGroupId string = virtualNetwork.outputs.networkSercurityGroupId
 output virtualNetworkSubnetId array = virtualNetwork.outputs.subnets
