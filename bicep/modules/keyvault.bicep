@@ -7,9 +7,6 @@ param location string
 resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
   name: name
   location: location
-  tags: {
-    lock: 'CHANGE_THIS_TO_DND_LATER'
-  }
   properties: {
     enabledForDeployment: true
     enableRbacAuthorization: true
