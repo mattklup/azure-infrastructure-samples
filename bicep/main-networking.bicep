@@ -11,3 +11,32 @@ module mainNetwork 'modules/networking.bicep' = {
     location: location
   }
 }
+
+module keyVault 'modules/keyvault.bicep' = {
+  scope: resourceGroup()
+  name: 'keyVault'
+  params: {
+    location: location
+    name: 'krakenKeyVault'
+  }
+}
+
+module sshKey 'modules/sshKey.bicep' = {
+  scope: resourceGroup()
+  name: 'sshKey'
+  params: {
+    location: location
+    keyVaultName: keyVault.outputs.name
+  }
+}
+
+module backendVms 'modules/backend-vms.bicep' = {
+  name: 'backendVms'
+  params: {
+    location: location
+    backendASGId: mainNetwork.outputs.backendASGId
+    subnetId: mainNetwork.outputs.backendSubnetId
+    sshPublicKey: sshKey.outputs.sshPublicKey
+  }
+}
+

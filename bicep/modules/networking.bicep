@@ -1,5 +1,5 @@
 @description('Location for the network.')
-param location string = resourceGroup().location
+param location string
 
 @description('Base name for the network.')
 param name string = resourceGroup().name
@@ -18,6 +18,12 @@ resource jumpboxASG 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
 
 resource backendASG 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
   name: 'backendASG'
+  location: location
+  properties: {}
+}
+
+resource lbASG 'Microsoft.Network/applicationSecurityGroups@2021-05-01' = {
+  name: 'lbASG'
   location: location
   properties: {}
 }
@@ -74,29 +80,56 @@ resource backendNsg 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
   properties: {
     securityRules: [
       {
-        name: 'JumpboxSshConnection'
+        name: 'JumpBoxBackendPoolAllow80'
         properties: {
-          description: 'Allow SSH'
           protocol: 'Tcp'
           sourcePortRange: '*'
-          destinationPortRange: '22'
+          destinationPortRange: '80'
+          sourceAddressPrefix: '*'
           sourceApplicationSecurityGroups: [
             {
-              id: jumpboxASG.id
-              location: jumpboxASG.location
-            }
-          ]
-          destinationApplicationSecurityGroups: [
-            {
-              id: backendASG.id
-              location: backendASG.location
+              id: lbASG.id
+              location: lbASG.location
             }
           ]
           access: 'Allow'
-          priority: 100
+          priority: 1030
           direction: 'Inbound'
+          sourcePortRanges: []
+          destinationPortRanges: []
+          sourceAddressPrefixes: []
+          destinationAddressPrefixes: []
+          destinationApplicationSecurityGroups: [
+            {
+              id: backendASG.id
+            }
+          ]
         }
       }
+      // {
+      //   name: 'JumpboxSshConnection'
+      //   properties: {
+      //     description: 'Allow SSH'
+      //     protocol: 'Tcp'
+      //     sourcePortRange: '*'
+      //     destinationPortRange: '22'
+      //     sourceApplicationSecurityGroups: [
+      //       {
+      //         id: jumpboxASG.id
+      //         location: jumpboxASG.location
+      //       }
+      //     ]
+      //     destinationApplicationSecurityGroups: [
+      //       {
+      //         id: backendASG.id
+      //         location: backendASG.location
+      //       }
+      //     ]
+      //     access: 'Allow'
+      //     priority: 100
+      //     direction: 'Inbound'
+      //   }
+      // }
       {
         // Come back to this, need to lock down resources 
         name: 'DenyOutboundSsh'
@@ -131,8 +164,11 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
 
 output virtualNetworkName string = virtualNetwork.name
 output subnets array = virtualNetwork.properties.subnets
+output backendSubnetId string = virtualNetwork.properties.subnets[1].id
+output jumpboxSubnetId string = virtualNetwork.properties.subnets[0].id
 output dnsLabelPrefix string = dnsLabelPrefix
-output jumpboxNsgId string = jumpboxNsg.id
-output backendNsgId string = backendNsg.id
+output jumpboxNSGId string = jumpboxNsg.id
+output backendNSGId string = backendNsg.id
 output jumpboxASGId string = jumpboxASG.id
 output backendASGId string = backendASG.id
+output lbASGId string = lbASG.id

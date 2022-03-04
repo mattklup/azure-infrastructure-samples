@@ -18,3 +18,5 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
     tenantId: subscription().tenantId
   }
 }
+
+output name string = keyVault.name
