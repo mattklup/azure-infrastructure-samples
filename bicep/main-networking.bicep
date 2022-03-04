@@ -17,7 +17,7 @@ module keyVault 'modules/keyvault.bicep' = {
   name: 'keyVault'
   params: {
     location: location
-    name: 'krakenKeyVault0123J'
+    name: 'krakenKeyVault0123JP'
   }
 }
 
