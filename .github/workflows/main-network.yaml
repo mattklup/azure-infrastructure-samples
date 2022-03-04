@@ -40,6 +40,9 @@ env:
       (github.ref == 'refs/heads/main' && 'Complete' || 'Validate')
     }}
   AZURE_DEPLOYMENT_USE_PRIVATE_STORAGE_ENDPOINT: ${{ github.event.inputs.private-storage-endpoint || 'false' }}
+  AZURE_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+  AZURE_CLIENT_ID: 1297a6f9-87e8-4fa6-bee1-1bea4bf7f0db
+  AZURE_SUBSCRIPTION_ID: c18d7855-903c-4516-bc7d-12cee2c20a8e
   
 
 jobs:
