@@ -101,7 +101,7 @@ resource backendNsg 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
         }
       }
       {
-        // Come back to this, need to lock down resources 
+        // TODO: Come back to this, need to lock down resources 
         name: 'DenyOutboundSsh'
         properties: {
           description: 'Deny SSH'
