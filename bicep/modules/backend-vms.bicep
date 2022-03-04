@@ -72,6 +72,7 @@ resource vm1 'Microsoft.Compute/virtualMachines@2021-11-01' = [for i in range(0,
       }
     }
     networkProfile: {
+      networkApiVersion: '2020-11-01'
       networkInterfaceConfigurations: [
         {
           name: 'nic4${i}'
