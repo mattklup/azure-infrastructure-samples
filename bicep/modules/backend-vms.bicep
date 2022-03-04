@@ -123,7 +123,6 @@ resource lb 'Microsoft.Network/loadBalancers@2020-11-01' = {
       {
         name: frontendIpConfigName
         properties: {
-          privateIPAllocationMethod: 'Dynamic'
           publicIPAddress: {
             id: lbPublicIP.id
           }
@@ -149,7 +148,7 @@ resource lb 'Microsoft.Network/loadBalancers@2020-11-01' = {
             id: resourceId('Microsoft.Network/loadBalancers/backendAddressPools', lbName, backendPoolName)
           }
           probe: {
-            id: resourceId('Microsoft.Network/loadBalancers/probes', 'globalLobby', 'defaultProbe')
+            id: resourceId('Microsoft.Network/loadBalancers/probes', lbName, 'healthProbe')
           }
         }
       }
