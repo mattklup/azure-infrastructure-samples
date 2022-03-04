@@ -85,7 +85,6 @@ resource backendNsg 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
           protocol: 'Tcp'
           sourcePortRange: '*'
           destinationPortRange: '80'
-          sourceAddressPrefix: '*'
           sourceApplicationSecurityGroups: [
             {
               id: lbASG.id
