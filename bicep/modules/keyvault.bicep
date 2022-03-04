@@ -39,7 +39,7 @@ resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04
   }
 }
 
-/*resource generateScript 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
+resource generateScript 'Microsoft.Resources/deploymentScripts@2020-10-01' = {
   dependsOn: [
     keyVaultRoleAssignment
   ]
@@ -57,10 +57,6 @@ resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04
     retentionInterval: 'PT1H'
     environmentVariables: [
       {
-        name: 'RESOURCE_GROUP'
-        value: resourceGroup().name
-      }
-      {
         name: 'SSLCERT_NAME'
         value: name
       }
@@ -76,4 +72,4 @@ set -euo pipefail
 az keyvault certificate create --vault-name $VAULT_NAME -n $SSLCERT_NAME -p "$(az keyvault certificate get-default-policy)"
 '''
   }
-}*/
+}
