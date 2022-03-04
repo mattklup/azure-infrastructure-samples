@@ -6,7 +6,6 @@ resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018
   name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'  // Contributor
 }
 
-
 resource keyVaultAdministratorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: subscription()
   name: '00482a5a-887f-4fb3-b363-3b7fe8e74483'  // Key Vault Administrator

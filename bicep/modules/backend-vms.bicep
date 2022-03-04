@@ -23,7 +23,7 @@ resource lbPublicIP 'Microsoft.Network/publicIPAddresses@2020-11-01' = {
   properties: {
     publicIPAllocationMethod: 'Static'
     dnsSettings: {
-      domainNameLabel: 'loadbalancer'
+      domainNameLabel: 'loadbalancer0123'
     }
   }
 }
