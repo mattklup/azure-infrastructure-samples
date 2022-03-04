@@ -30,7 +30,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2021-10-01' = {
 }
 
 resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(identity.id, 'keyvault', keyVaultAdministratorRoleDefinition.id)
+  name: guid('test')
   scope: keyVault
   properties: {
     principalType: 'ServicePrincipal'
