@@ -6,14 +6,6 @@ resource contributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018
   name: 'b24988ac-6180-42a0-ab88-20f7382dd24c'  // Contributor
 }
 
-resource rgRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
-  name: guid(resourceGroup().id, contributorRoleDefinition.id)
-  properties: {
-    principalType: 'ServicePrincipal'
-    principalId: identity.properties.principalId
-    roleDefinitionId: contributorRoleDefinition.id
-  }
-}
 
 resource keyVaultAdministratorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2018-01-01-preview' existing = {
   scope: subscription()
@@ -31,6 +23,15 @@ resource keyVaultRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04
     principalType: 'ServicePrincipal'
     principalId: identity.properties.principalId
     roleDefinitionId: keyVaultAdministratorRoleDefinition.id
+  }
+}
+
+resource rgRoleAssignment 'Microsoft.Authorization/roleAssignments@2020-04-01-preview' = {
+  name: guid(resourceGroup().id, contributorRoleDefinition.id)
+  properties: {
+    principalType: 'ServicePrincipal'
+    principalId: identity.properties.principalId
+    roleDefinitionId: contributorRoleDefinition.id
   }
 }
 
