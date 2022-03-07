@@ -4,6 +4,9 @@ param location string
 @description('Base name for the network.')
 param name string = resourceGroup().name
 
+@description('DNS name')
+param dnsName string = 'csedemos.com'
+
 var dnsLabelPrefix = toLower(name)
 var addressPrefix = '10.0.0.0/16'
 var networkSecurityGroupName = '${name}-nsg'
@@ -130,7 +133,7 @@ resource backendNsg 'Microsoft.Network/networkSecurityGroups@2020-03-01' = {
       //   }
       // }
       {
-        // Come back to this, need to lock down resources 
+        // TODO: Come back to this, need to lock down resources 
         name: 'DenyOutboundSsh'
         properties: {
           description: 'Deny SSH'
@@ -158,6 +161,24 @@ resource virtualNetwork 'Microsoft.Network/virtualNetworks@2020-03-01' = {
       ]
     }
     subnets: subnets
+  }
+}
+
+resource dnsZone 'Microsoft.Network/privateDnsZones@2018-09-01' = {
+  name: dnsName
+  location: 'global'
+}
+
+
+resource privateDnsZonesLink 'Microsoft.Network/privateDnsZones/virtualNetworkLinks@2018-09-01' = {
+  parent: dnsZone
+  name: 'dns-link'
+  location: 'global'
+  properties: {
+    registrationEnabled: true
+    virtualNetwork: {
+      id: virtualNetwork.id
+    }
   }
 }
 
