@@ -22,7 +22,7 @@ param storageAccountUsesPrivateEndpoint bool = false
 @description('Number of vms to deploy.')
 var privateVmCount = 2
 
-module virtualNetwork 'modules/virtual-network.bicep' = {
+module virtualNetwork 'basic-network/virtual-network.bicep' = {
   name: 'virtualNetwork'
   params: {
     name: name
@@ -31,7 +31,7 @@ module virtualNetwork 'modules/virtual-network.bicep' = {
 }
 
 // jumpbox
-module virtualMachineJumpbox 'modules/virtual-machine.bicep' = {
+module virtualMachineJumpbox 'basic-network/virtual-machine.bicep' = {
   name: 'virtualMachine-jumpbox'
   params: {
     name: '${name}-jumpbox'
@@ -44,7 +44,7 @@ module virtualMachineJumpbox 'modules/virtual-machine.bicep' = {
 }
 
 // private vms
-module virtualMachinePrivate 'modules/virtual-machine.bicep' = [for i in range(0, privateVmCount): {
+module virtualMachinePrivate 'basic-network/virtual-machine.bicep' = [for i in range(0, privateVmCount): {
   name: 'virtualMachine-${i}'
   params: {
     name: '${name}-${i}'
@@ -55,14 +55,14 @@ module virtualMachinePrivate 'modules/virtual-machine.bicep' = [for i in range(0
   }
 }]
 
-module privateDnsZone 'modules/private-dns-zone.bicep' = if (deployPrivateDnsZone) {
+module privateDnsZone 'basic-network/private-dns-zone.bicep' = if (deployPrivateDnsZone) {
   name: 'privateDnsZone'
   params: {
     virtualNetworkName: virtualNetwork.outputs.virtualNetworkName
   }
 }
 
-module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount) {
+module storageAccount 'basic-network/storage-account.bicep' = if (deployStorageAccount) {
   name: 'storageAccount'
   params: {
     name: name
@@ -71,7 +71,7 @@ module storageAccount 'modules/storage-account.bicep' = if (deployStorageAccount
   }
 }
 
-module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.bicep' = if (deployStorageAccount && storageAccountUsesPrivateEndpoint) {
+module storageAccountPrivateEndpoint 'basic-network/storage-account-private-endpoint.bicep' = if (deployStorageAccount && storageAccountUsesPrivateEndpoint) {
   name: 'storageAccountPrivateEndpoint'
   params: {
     name: name
@@ -81,7 +81,7 @@ module storageAccountPrivateEndpoint 'modules/storage-account-private-endpoint.b
   }
 }
 
-module keyvault 'modules/keyvault.bicep' = {
+module keyvault 'basic-network/keyvault.bicep' = {
   name: 'keyvault'
   params: {
     name: name
