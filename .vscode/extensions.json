@@ -1,6 +1,7 @@
 {
     "recommendations": [
         "ms-azuretools.vscode-bicep",
+        "hashicorp.terraform",
         "hediet.vscode-drawio",
         "eamodio.gitlens",
         "mhutchie.git-graph",

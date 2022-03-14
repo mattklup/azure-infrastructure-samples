@@ -34,6 +34,10 @@ on:
       - .github/workflows/basic-network-terraform.yml
       - terraform/**
 
+defaults:
+  run:
+    working-directory: ./terraform
+
 env:
   IS_MAIN_PUSH: ${{ github.ref == 'refs/heads/main' }}
   MAIN_BICEP_TEMPLATE_PATH: ./bicep/main-basic-network.bicep
@@ -78,7 +82,24 @@ jobs:
     - name: Setup terraform
       uses: hashicorp/setup-terraform@v1
 
-    - name: Deploy terraform templates
+    - name: terraform fmt
+      id: fmt
+      run: terraform fmt -check -diff
+      continue-on-error: true
+
+    - name: terraform init
+      id: init
+      run: terraform init
+
+    - name: terraform validate
+      id: validate
+      run: terraform validate -no-color
+
+    - name: terraform plan
+      id: plan
+      run: terraform plan -input=false -no-color -var-file=azure.tfvars -out=azure.tfplan
+
+    - name: terraform apply
       id: azure-deploy
       run: |
         echo Terraform
