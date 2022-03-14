@@ -97,7 +97,11 @@ jobs:
 
     - name: terraform plan
       id: plan
-      run: terraform plan -input=false -no-color -var-file=azure.tfvars -out=azure.tfplan
+      run: |
+        terraform plan -input=false -no-color \
+          -var "resource_group_name=${{ env.AZURE_RESOURCE_GROUP_NAME }}" \
+          -var "resource_group_location=${{ env.AZURE_RESOURCE_GROUP_LOCATION }}" \
+          -out=azure.tfplan
 
     - name: terraform apply
       id: azure-deploy
