@@ -38,7 +38,6 @@ jobs:
       ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
       ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
       ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
-      AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.resource-group-name || format('kraken-{0}', env.AZURE_RESOURCE_GROUP_LOCATION) }}
 
     steps:
     - uses: actions/checkout@v2
@@ -61,6 +60,8 @@ jobs:
 
     - name: terraform plan
       id: plan
+      env:
+        AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.resource-group-name || format('kraken-{0}', env.AZURE_RESOURCE_GROUP_LOCATION) }}
       run: |
         terraform plan -input=false -no-color \
           -var "resource_group_name=${{ env.AZURE_RESOURCE_GROUP_NAME }}" \
