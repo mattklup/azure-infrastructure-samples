@@ -61,7 +61,7 @@ jobs:
     - name: terraform plan
       id: plan
       env:
-        AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.resource-group-name || format('kraken-{0}', env.AZURE_RESOURCE_GROUP_LOCATION) }}
+        AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.resource-group-name || format('kraken-tf-{0}', env.AZURE_RESOURCE_GROUP_LOCATION) }}
       run: |
         terraform plan -input=false -no-color \
           -var "resource_group_name=${{ env.AZURE_RESOURCE_GROUP_NAME }}" \
