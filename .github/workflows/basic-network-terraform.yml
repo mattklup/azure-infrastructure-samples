@@ -14,19 +14,6 @@ on:
         options:
         - westus2
         - centralus
-      deployment-mode:
-        required: true
-        description: Azure deployment mode
-        type: choice
-        options:
-        - Complete
-        - Incremental
-        - Validate
-      private-storage-endpoint:
-        required: true
-        description: Azure Storage only accessible from vnet
-        type: boolean
-        default: false
 
   push:
     branches:
@@ -40,16 +27,8 @@ defaults:
 
 env:
   IS_MAIN_PUSH: ${{ github.ref == 'refs/heads/main' }}
-  MAIN_BICEP_TEMPLATE_PATH: ./bicep/main-basic-network.bicep
   AZURE_RESOURCE_GROUP_LOCATION: ${{ github.event.inputs.location || 'westus2' }}
-  AZURE_DEPLOYMENT_NAME: ${{ format('basic-network-terraform.{0}.{1}', github.actor, github.RUN_ID) }}
-  AZURE_DEPLOYMENT_MODE: >-
-    ${{ 
-      github.event.inputs.deployment-mode || 
-      (github.ref == 'refs/heads/main' && 'Complete' || 'Validate')
-    }}
-  AZURE_DEPLOYMENT_USE_PRIVATE_STORAGE_ENDPOINT: ${{ github.event.inputs.private-storage-endpoint || 'false' }}
-  
+
 jobs:
   terraform:
     runs-on: ubuntu-latest
@@ -59,6 +38,7 @@ jobs:
       ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
       ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
       ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
+      AZURE_RESOURCE_GROUP_NAME: ${{ github.event.inputs.resource-group-name || format('kraken-{0}', env.AZURE_RESOURCE_GROUP_LOCATION) }}
 
     steps:
     - uses: actions/checkout@v2
