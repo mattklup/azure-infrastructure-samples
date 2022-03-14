@@ -51,33 +51,17 @@ env:
   AZURE_DEPLOYMENT_USE_PRIVATE_STORAGE_ENDPOINT: ${{ github.event.inputs.private-storage-endpoint || 'false' }}
   
 jobs:
-  deploy:
+  terraform:
     runs-on: ubuntu-latest
+
+    env:
+      ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
+      ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
+      ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
+      ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Azure Login
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Set current Azure Subscription and update environment variables
-      run: |
-        az account show
-        echo "AZURE_SUBSCRIPTION_ID=$(az account show --query "id" --output tsv)" >> $GITHUB_ENV
-        echo "AZURE_RESOURCE_GROUP_NAME=${{ github.event.inputs.resource-group-name || format('kraken-tf-{0}', env.AZURE_RESOURCE_GROUP_LOCATION) }}" >> $GITHUB_ENV
-
-    - name: Create Azure Resource Group
-      uses: Azure/CLI@v1
-      with:
-        inlineScript: |
-          #!/bin/bash
-          az group create \
-            --name $AZURE_RESOURCE_GROUP_NAME \
-            --location $AZURE_RESOURCE_GROUP_LOCATION \
-            --tags branch="$GITHUB_REF_NAME" repository="$GITHUB_REPOSITORY"
-          echo 🎉
 
     - name: Setup terraform
       uses: hashicorp/setup-terraform@v1
@@ -97,11 +81,6 @@ jobs:
 
     - name: terraform plan
       id: plan
-      env:
-        ARM_CLIENT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientId }}
-        ARM_CLIENT_SECRET: ${{ fromJSON(secrets.AZURE_CREDENTIALS).clientSecret }}
-        ARM_SUBSCRIPTION_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).subscriptionId }}
-        ARM_TENANT_ID: ${{ fromJSON(secrets.AZURE_CREDENTIALS).tenantId }}
       run: |
         terraform plan -input=false -no-color \
           -var "resource_group_name=${{ env.AZURE_RESOURCE_GROUP_NAME }}" \
@@ -110,8 +89,7 @@ jobs:
 
     - name: terraform apply
       id: azure-deploy
-      run: |
-        echo Terraform
+      run: terraform apply "azure.tfplan"
 
     - name: Last step diagnostics
       if: always()
