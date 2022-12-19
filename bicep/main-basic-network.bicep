@@ -17,10 +17,10 @@ param deployPrivateDnsZone bool = true
 param deployStorageAccount bool = true
 
 @description('If deploying an azure storage account, configure private endpoint.')
-param storageAccountUsesPrivateEndpoint bool = false
+param storageAccountUsesPrivateEndpoint bool = true
 
 @description('Number of vms to deploy.')
-var privateVmCount = 2
+var privateVmCount = 1
 
 module virtualNetwork 'modules/virtual-network.bicep' = {
   name: 'virtualNetwork'
